@@ -17,6 +17,7 @@ public class TestCalculadora {
 		System.out.println("Resultado Multiplicacion: " + resultadoMulti);
 		System.out.println("Resultado Division: " + resultadoDivision);
 		System.out.println("Resultado Promedio: " +resultadoPromedio );
+		calcu.mostrarResultado();
 		
 	}
 

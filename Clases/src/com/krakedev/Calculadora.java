@@ -47,4 +47,12 @@ public class Calculadora {
 
 	}
 
+	public void mostrarResultado() {
+		
+		System.out.println("Ahorita no joven, Sali al almuerzo. Regreso en 15 minutos");
+	}
+	
+	
+	
+
 }
