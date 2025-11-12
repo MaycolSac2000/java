@@ -12,32 +12,34 @@ public class TestPersona {
 
 		// 3. Acedo a los atributos de la clase persona
 
-		System.out.println("nombre: " + p.nombre);
+		System.out.println("nombre: " + p.getNombre());
 
-		System.out.println("Edad: " + p.edad);
+		System.out.println("Edad: " + p.getEdad());
 
-		System.out.println("Estatura: " + p.estatura);
+		System.out.println("Estatura: " + p.getEstatura());
 
 		// 4. Modificar los atributos
-		p.nombre = "Mario";
-		p.edad = 15;
-		p.estatura = 1.78;
+		p.setNombre("Mario");
+		p.setEdad(15);
+		p.setEstatura(1.78);
 		
 		System.out.println("*****************************");
-		System.out.println("nombre: " + p.nombre);
-		System.out.println("Edad: " + p.edad);
-		System.out.println("Estatura: " + p.estatura);
+		System.out.println("nombre: " + p.getNombre());
+		System.out.println("Edad: " + p.getEdad());
+		System.out.println("Estatura: " + p.getEstatura());
 		
 		Persona p2 = new Persona(); // Otra forma de instanciar
 		
-		p2.nombre = "Manuel";
-		p2.edad = 11;
-		p2.estatura = 1.56;
+		p2.setNombre("Manuel");
+		p2.setEdad(11);
+		p2.setEstatura(1.56);
+		
+		
 		
 		System.out.println("*****************************");
-		System.out.println("nombre: " + p2.nombre);
-		System.out.println("Edad: " + p2.edad);
-		System.out.println("Estatura: " + p2.estatura);
+		System.out.println("nombre: " + p2.getNombre());
+		System.out.println("Edad: " + p2.getEdad());
+		System.out.println("Estatura: " + p2.getEstatura());
 		
 		
 				

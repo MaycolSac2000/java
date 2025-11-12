@@ -17,9 +17,9 @@ public class testCuadrado {
 		
 		
 		
-		c1.lado = 4;
-		c2.lado = 6;
-		c3.lado = 45;
+		c1.setLado(4);
+		c2.setLado(6);
+		c3.setLado(45);
 		
 		areaCuadrado1 = c1.calcularArea();
 		areaCuadrado2 = c2.calcularArea();
