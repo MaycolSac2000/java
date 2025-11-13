@@ -10,6 +10,20 @@ public class TestPersona {
 		Persona p; // 1. Declaro una variable llamada p de tipo Persona
 		p = new Persona(); // 2. Instancio un Objeto Persona
 
+		// Deacuerdo a los parametros se puede llamar al constructor con el mismo nombre
+		Persona p3 = new Persona("Paul");
+		Persona p4 = new Persona("Susana",19,1.20);
+		
+		//Se llama al la variable y a los metodos get para mostrar en pantalla lo que ya se seteo anteriormente
+		System.out.println("nombre: " + p4.getNombre());
+
+		System.out.println("Edad: " + p4.getEdad());
+
+		System.out.println("Estatura: " + p4.getEstatura());
+
+		
+		
+		
 		// 3. Acedo a los atributos de la clase persona
 
 		System.out.println("nombre: " + p.getNombre());
