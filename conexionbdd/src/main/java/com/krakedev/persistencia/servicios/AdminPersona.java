@@ -2,8 +2,10 @@ package com.krakedev.persistencia.servicios;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,13 +15,12 @@ import com.krakedev.persistencia.utils.ConexionBDD;
 
 public class AdminPersona {
 
-	
 	private static final Logger LOGGER = LogManager.getLogger(AdminPersona.class);
-	
+
 	public static void insertar(Persona persona) throws Exception {
 		Connection con = null;
 		PreparedStatement ps = null;
-		LOGGER.trace("Persona a insertar>>> "+persona);
+		LOGGER.trace("Persona a insertar>>> " + persona);
 		try {
 			// abrir conexion
 
@@ -42,7 +43,7 @@ public class AdminPersona {
 		} catch (Exception e) {
 
 			// Logear el error con log4j
-			LOGGER.error("Error al insertar",e);
+			LOGGER.error("Error al insertar", e);
 			// Mostrar el error al usuario
 			throw new Exception("Error al insertar");
 		} finally {
@@ -51,7 +52,7 @@ public class AdminPersona {
 			try {
 				con.close();
 			} catch (SQLException e) {
-				LOGGER.error("Error con la base de datos",e);
+				LOGGER.error("Error con la base de datos", e);
 				throw new Exception("Error con la base d edatos");
 
 				// System.out.println("Error de infraestructura");
@@ -61,18 +62,18 @@ public class AdminPersona {
 		}
 
 	}
-	
+
 	public static void actualizar(Persona persona) throws Exception {
 		Connection con = null;
 		PreparedStatement ps = null;
-		LOGGER.trace("Persona a actualizar>>> "+persona);
+		LOGGER.trace("Persona a actualizar>>> " + persona);
 		try {
 			// abrir conexion
 
 			con = ConexionBDD.conectar();
 			ps = con.prepareStatement(
 					"update personas set nombre=?,apellido=?,estado_civil_codigo=?,estatura=?,cantidad_ahorrada=?,numero_hijos=?,fecha_nacimiento=?,hora_nacimiento=? where cedula=?");
-			
+
 			ps.setString(1, persona.getNombre());
 			ps.setString(2, persona.getApellido());
 			ps.setString(3, persona.getEstadoCivil().getCodigo());
@@ -87,7 +88,7 @@ public class AdminPersona {
 		} catch (Exception e) {
 
 			// Logear el error con log4j
-			LOGGER.error("Error al actualizar",e);
+			LOGGER.error("Error al actualizar", e);
 			// Mostrar el error al usuario
 			throw new Exception("Error al actualizar");
 		} finally {
@@ -96,7 +97,7 @@ public class AdminPersona {
 			try {
 				con.close();
 			} catch (SQLException e) {
-				LOGGER.error("Error con la base de datos",e);
+				LOGGER.error("Error con la base de datos", e);
 				throw new Exception("Error con la base de datos");
 
 				// System.out.println("Error de infraestructura");
@@ -106,25 +107,24 @@ public class AdminPersona {
 		}
 
 	}
-	
+
 	public static void eliminar(String cedula) throws Exception {
 		Connection con = null;
 		PreparedStatement ps = null;
-		LOGGER.trace("Persona a eliminar persona con cedula:>>> "+cedula);
+		LOGGER.trace("Persona a eliminar persona con cedula:>>> " + cedula);
 		try {
 			// abrir conexion
 
 			con = ConexionBDD.conectar();
 			ps = con.prepareStatement("Delete from personas where cedula =?");
-			
-		
+
 			ps.setString(1, cedula);
 			ps.executeUpdate();
 
 		} catch (Exception e) {
 
 			// Logear el error con log4j
-			LOGGER.error("Error al eliminar",e);
+			LOGGER.error("Error al eliminar", e);
 			// Mostrar el error al usuario
 			throw new Exception("Error al eliminar");
 		} finally {
@@ -133,7 +133,7 @@ public class AdminPersona {
 			try {
 				con.close();
 			} catch (SQLException e) {
-				LOGGER.error("Error con la base de datos",e);
+				LOGGER.error("Error con la base de datos", e);
 				throw new Exception("Error con la base de datos");
 
 				// System.out.println("Error de infraestructura");
@@ -141,6 +141,67 @@ public class AdminPersona {
 			}
 
 		}
+
+	}
+
+	public static ArrayList<Persona> buscarPorNombre(String nombreBusqueda) throws Exception {
+
+		ArrayList<Persona> personas = new ArrayList<Persona>();
+
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			con = ConexionBDD.conectar();
+			ps = con.prepareStatement("Select * from personas where nombre like ?");
+			ps.setString(1,"%"+nombreBusqueda+"%");
+			rs = ps.executeQuery();
+			
+			/* Si esque se le trae por clave primaria no se utilizaria un array si no una persona
+			 * como estoy por clave primaria y traeria un solo elemento no se utiliza el while
+			 * 
+			 * if(rs.next){
+			 * 		CREARIA UNA PERSONA
+			 * 
+			 * }ELSE{
+			 * NULL}
+			 * 
+			 * */ 
+			while(rs.next()) {
+				
+				
+				String nombre =rs.getString("nombre");
+				String cedula = rs.getString("cedula");
+				Persona p = new Persona();
+				p.setCedula(cedula);
+				p.setNombre(nombre);
+				personas.add(p);
+			}
+			
+			
+			
+			
+		} catch (Exception e) {
+			// Logear el error con log4j
+			LOGGER.error("Error al consultar por nombre", e);
+			// Mostrar el error al usuario
+			throw new Exception("Error consultar por nombre");
+		} finally {
+			// cerrar la conexion
+
+			try {
+				con.close();
+			} catch (SQLException e) {
+				LOGGER.error("Error con la base de datos", e);
+				throw new Exception("Error con la base de datos");
+
+				// System.out.println("Error de infraestructura");
+
+			}
+
+		}
+
+		return personas;
 
 	}
 

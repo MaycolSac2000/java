@@ -2,12 +2,15 @@ package com.krakedev.persistencia.servicios;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.krakedev.persistencia.entidades.Clientes;
+import com.krakedev.persistencia.entidades.Persona;
 import com.krakedev.persistencia.utils.ConexionBDD;
 
 public class AdminCliente {
@@ -130,7 +133,125 @@ private static final Logger LOGGER = LogManager.getLogger(AdminPersona.class);
 		}
 
 	}
+	
+	public static Clientes buscarPorClavePrimaria(String cedula) throws Exception {
 
+		Clientes cliente = new Clientes();
+
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			con = ConexionBDD.conectar();
+			ps = con.prepareStatement("Select * from clientes where cedula = ?");
+			ps.setString(1,cedula);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				String ced = rs.getString("cedula");
+				String nombre = rs.getString("nombre");
+				String apellido = rs.getString("apellido");
+				int edad = rs.getInt("edad");
+				cliente.setCedula(ced);
+				cliente.setNombre(nombre);
+				cliente.setApellido(apellido);
+				cliente.setEdad(edad);
+				
+			}
+			
+			/* Si esque se le trae por clave primaria no se utilizaria un array si no una persona
+			 * como estoy por clave primaria y traeria un solo elemento no se utiliza el while
+			 * 
+			 * if(rs.next){
+			 * 		CREARIA UNA PERSONA
+			 * 
+			 * }ELSE{
+			 * NULL}
+			 * 
+			 * */ 
+	
+			
+			
+			
+			
+		} catch (Exception e) {
+			// Logear el error con log4j
+			LOGGER.error("Error al consultar por nombre", e);
+			// Mostrar el error al usuario
+			throw new Exception("Error consultar por nombre");
+		} finally {
+			// cerrar la conexion
+
+			try {
+				con.close();
+			} catch (SQLException e) {
+				LOGGER.error("Error con la base de datos", e);
+				throw new Exception("Error con la base de datos");
+
+				// System.out.println("Error de infraestructura");
+
+			}
+
+		}
+
+		return cliente;
+
+	}
+
+	
+	public static ArrayList<Clientes> buscarPorEdad(int edad) throws Exception {
+
+		ArrayList<Clientes> clientes = new ArrayList<Clientes>();
+
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			con = ConexionBDD.conectar();
+			ps = con.prepareStatement("Select * from clientes where edad > ?");
+			ps.setInt(1,edad);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				
+				String ced = rs.getString("cedula");
+				String nombre = rs.getString("nombre");
+				String apellido = rs.getString("apellido");
+				int ed = rs.getInt("edad");
+				Clientes cli = new Clientes();
+				cli.setCedula(ced);
+				cli.setNombre(nombre);
+				cli.setApellido(apellido);
+				cli.setEdad(ed);
+				clientes.add(cli);
+				
+				
+			}
+			
+			
+			
+			
+		} catch (Exception e) {
+			// Logear el error con log4j
+			LOGGER.error("Error al consultar por nombre", e);
+			// Mostrar el error al usuario
+			throw new Exception("Error consultar por nombre");
+		} finally {
+			// cerrar la conexion
+
+			try {
+				con.close();
+			} catch (SQLException e) {
+				LOGGER.error("Error con la base de datos", e);
+				throw new Exception("Error con la base de datos");
+
+				// System.out.println("Error de infraestructura");
+
+			}
+
+		}
+
+		return clientes;
+
+	}
 	
 	
 }
